@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <button id="rock">ROCK</button>
+    <button id="paper">PAPER</button>
+    <button id="scissors">SCISSORS</button>
+    <div id="score"></div>
+</body>
+</html>
+
+
 <script>
     let playerScore = 0;
     let computerScore = 0;
@@ -20,8 +31,33 @@
 		return newStr;
     }
 
-    function playRound(){
-        let playerSelection = prompt("Enter Rock, Paper, or Scissors!");
+    function tieResults(playerChoice){
+        const score = document.querySelector("#score");
+        const result = document.createElement('div');
+        result.textContent = "It's a Tie! You both chose " + playerChoice + "!";
+        score.appendChild(result);
+    }
+    function loseResult(playerChoice, computerChoice){
+        const score = document.querySelector("#score");
+        const result = document.createElement('div');
+        result.textContent = " You Lose! " + computerChoice + " beats " + playerChoice + "!";
+        score.appendChild(result);
+
+        computerScore++;
+    }
+    function winResult(playerChoice, computerChoice){
+        const score = document.querySelector("#score");
+        const result = document.createElement('div');
+        result.textContent = " You Win! " + playerChoice + " beats " + computerChoice + "!";
+        score.appendChild(result);
+
+        playerScore++;
+    }
+    
+    
+
+    function playRound(playerSelection){
+        //let playerSelection = prompt("Enter Rock, Paper, or Scissors!");
         let computerSelection = computerPlay();
         playerSelection = playerSelection.toLowerCase(); //to make case insentive
         let computerString = getString(computerSelection); //convert computer choice into string selection
@@ -33,31 +69,45 @@
             case "Rock":
                 console.log("Rock"); 
                 switch(computerSelection){
-                    case 1: console.log(" It's a Tie! " + "You both chose " + playerSelection + "!"); 
-                    break;
-                    case 2: console.log(" You Lose! " + computerString + " beats " + playerSelection + "!"); computerScore++;
-                    break;
-                    case 3: console.log(" You Win! " + playerSelection + " beats " + computerString + "!"); playerScore++;
+                    case 1: 
+                        console.log(" It's a Tie! " + "You both chose " + playerSelection + "!"); 
+                        tieResults(playerSelection);
+                        break;
+                    case 2: 
+                        console.log(" You Lose! " + computerString + " beats " + playerSelection + "!"); 
+                        loseResult(playerSelection, computerString);
+                        break;
+                    case 3: 
+                        console.log(" You Win! " + playerSelection + " beats " + computerString + "!"); 
+                        winResult(playerSelection, computerString);
                 }
                 break;
             case "Paper":
                 console.log("Paper");
                 switch(computerSelection){
-                    case 1: console.log(" You Win! " + playerSelection + " beats " + computerString + "!"); playerScore++;
+                    case 1: console.log(" You Win! " + playerSelection + " beats " + computerString + "!"); 
+                    winResult(playerSelection, computerString);
                     break;
-                    case 2: console.log(" It's a Tie! " + "You both chose " + playerSelection + "!"); 
+                    case 2: 
+                        console.log(" It's a Tie! " + "You both chose " + playerSelection + "!"); 
+                        tieResults(playerSelection);
                     break;
-                    case 3: console.log(" You Lose! " + computerString + " beats " + playerSelection + "!"); computerScore++;
+                    case 3: console.log(" You Lose! " + computerString + " beats " + playerSelection + "!"); 
+                    loseResult(playerSelection, computerString);
                 }
                 break;
             case "Scissors":
                 console.log("Scissors")
                 switch(computerSelection){
-                    case 1: console.log(" You Lose! " + computerString + " beats " + playerSelection + "!"); computerScore++;
+                    case 1: console.log(" You Lose! " + computerString + " beats " + playerSelection + "!"); 
+                    loseResult(playerSelection, computerString);
                     break;
-                    case 2: console.log(" You Win! " + playerSelection + " beats " + computerString + "!"); playerScore++;
+                    case 2: console.log(" You Win! " + playerSelection + " beats " + computerString + "!"); 
+                    winResult(playerSelection, computerString);
                     break;
-                    case 3: console.log(" It's a Tie! " + "You both chose " + playerSelection + "!");
+                    case 3: 
+                        console.log(" It's a Tie! " + "You both chose " + playerSelection + "!");
+                        tieResults(playerSelection);
                 }
                 break;
             default:
@@ -68,21 +118,77 @@
     
     function game(){
         playerScore = 0;
-        computerScore =0;
-        playRound();
-        playRound();
-        playRound();
-        playRound();
-        playRound();
+        computerScore = 0;
 
-        console.log("Total Score: Player:" + playerScore + " Computer:" + computerScore);
-        if(playerScore < computerScore){
-            console.log("You Lose!!!")
-        }else if(playerScore > computerScore){
-            console.log("You Win!!!")
-        }else{
-            console.log("It's a Tie!!!")
+        const score = document.querySelector("#score");
+        const total = document.createElement('div');
+        total.textContent = "Total Score: Player:" + playerScore + " Computer:" + computerScore; 
+        score.appendChild(total);
+
+        const gameover = document.createElement('h1');
+
+        document.getElementById("rock").addEventListener("click",function(){
+            if(playerScore + computerScore < 5){
+            playRound("rock");
+            total.innerHTML = "Total Score: Player:" + playerScore + " Computer:" + computerScore; //updates total running score
+            }
+            else{
+                if(playerScore < computerScore){
+                gameover.textContent = "GAME OVER! YOU LOSE!!!"
+                score.appendChild(gameover);
+                }else if(playerScore > computerScore){
+                gameover.textContent = "GAME OVER! YOU WIN!!!"
+                score.appendChild(gameover);
+                }
+                 else{
+                gameover.textContent = "GAME OVER! IT'S A TIE!!!"
+                score.appendChild(gameover);
+                }
+            }
+        });
+
+        document.getElementById("paper").addEventListener("click",function(){
+            if(playerScore + computerScore < 5){
+            playRound("paper");
+            total.innerHTML = "Total Score: Player:" + playerScore + " Computer:" + computerScore;
         }
+            else{
+                if(playerScore < computerScore){
+                gameover.textContent = "GAME OVER! YOU LOSE!!!"
+                score.appendChild(gameover);
+                }else if(playerScore > computerScore){
+                gameover.textContent = "GAME OVER! YOU WIN!!!"
+                score.appendChild(gameover);
+                }
+                 else{
+                gameover.textContent = "GAME OVER! IT'S A TIE!!!"
+                score.appendChild(gameover);
+                }
+            }
+        });
+
+        document.getElementById("scissors").addEventListener("click",function(){
+            if(playerScore + computerScore < 5){
+            playRound("scissors");
+            total.innerHTML = "Total Score: Player:" + playerScore + " Computer:" + computerScore;
+            }
+            else{
+                if(playerScore < computerScore){
+                gameover.textContent = "GAME OVER! YOU LOSE!!!"
+                score.appendChild(gameover);
+                }else if(playerScore > computerScore){
+                gameover.textContent = "GAME OVER! YOU WIN!!!"
+                score.appendChild(gameover);
+                }
+                 else{
+                gameover.textContent = "GAME OVER! IT'S A TIE!!!"
+                score.appendChild(gameover);
+                }
+            }
+        });
+
+        
+
     }
 
     game();
