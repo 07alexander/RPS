@@ -1,2 +1,2 @@
 # RPS
-Console-only rock paper scissors game
+Simple UI rock paper scissors game
